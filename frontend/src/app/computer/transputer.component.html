@@ -1,0 +1,173 @@
+<div class="row pb-5">
+  <div class="col-12 px-5">
+    <!-- CPU CODE and RAM -->
+    <div class="row">
+      <div class="col" *ngFor="let cpu of cpus; let i = index">
+        <app-cpu [state]="cpu.state" [errors]="cpu.errors" [isEditing]="isEditing" [initialCode]="subprograms[i].code" (codeBuffer)="subprograms[i].code = $event"></app-cpu>
+      </div>
+      <div class="col" style="min-width:60px; max-width:60px; border-bottom: 1px solid white;">
+        <app-memory [state]="memory.state"></app-memory>
+      </div>
+    </div>
+    
+    <!-- BUTTONS -->
+    <div class="row pt-3">
+      <div class="col-3" style="min-width:200px; padding-right:30px;">
+        <div class="row">
+          <button *ngIf="isEditing" type="button" class="btn btn-primary btn-block" (click)="assemble()">ASSEMBLE</button>
+          <button *ngIf="!isEditing" type="button" class="btn btn-primary btn-block" (click)="edit()">EDIT</button>
+        </div>
+        <div class="row">
+          <div class="col-6 px-0">
+            <button type="button" class="btn btn-primary btn-block" (click)="rewind()" [disabled]="isEditing">❮</button>
+          </div>
+          <div class="col-6 px-0">
+            <button type="button" class="btn btn-primary btn-block" (click)="advance()" [disabled]="isEditing">❯</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-4 px-0">
+            <button type="button" class="btn btn-primary btn-block" (click)="skipToStart()" [disabled]="isEditing">▐◀◀</button>
+          </div>
+          <div *ngIf="!isPlaying" class="col-4 px-0">
+            <button type="button" class="btn btn-primary btn-block" (click)="play()" [disabled]="isEditing">▶</button>
+          </div>
+          <div *ngIf="isPlaying" class="col-4 px-0">
+            <button type="button" class="btn btn-primary btn-block" (click)="pause()" [disabled]="isEditing">❚❚</button>
+          </div>
+          <div class="col-4 px-0">
+            <button type="button" class="btn btn-primary btn-block" (click)="skipToEnd()" [disabled]="isEditing">▶▶▌</button>
+          </div>
+        </div>
+        <!-- TASK SELECTOR -->
+        <div class="row pt-3">
+          <div class="col-12">
+            <app-task-selector [activeTask]="task" [maxTask]="maxTask" (taskId)="getTask($event)"></app-task-selector>
+          </div>
+        </div>
+      </div>
+
+      <!-- STATUS -->
+      <div class="col-9">
+        <div class="row">
+          <!-- TRANSPUTER INFO -->
+          <div class="col-3 border pb-2" style="min-width:130px;">
+            <div class="row justify-content-center">
+              <h3>STATUS</h3>
+            </div>
+            <div class="row px-2">
+              <span>
+                CPUS: 
+                  <button type="button" class="btn btn-sm btn-primary" style="font-size: 10px; height: 23px;" 
+                          (click)="cpuAmountDecrease()"
+                          [disabled]="!isEditing">❮</button>
+                  {{cpuAmount}}
+                  <button type="button" class="btn btn-sm btn-primary" style="font-size: 10px; height: 23px;" 
+                          (click)="cpuAmountIncrease()"
+                          [disabled]="!isEditing">❯</button>
+                  <br>
+                  RAM: 16 BYTES <br>
+                LINKS: 
+                  <span *ngIf="!isAssembling && !isEditing" class="positive"> ONLINE </span>
+                  <span *ngIf="isAssembling || isEditing" class="negative"> OFFLINE </span>
+                  <br>
+                CYCLE: {{universalClock}} / 
+                  <span [ngClass]="hitCycleLimit ? 'negative':''">{{maxRecordedProgramLength}}</span>
+                  <br>
+                SPEED: {{clockSpeed}} KHz
+              </span>
+              <input type="range" class="slider" min="57" max="910" [(ngModel)]="clockSpeed">
+            </div>
+          </div>
+          <!-- TASK INFO -->
+          <div class="col p-0 border">
+            <!-- TITLE -->
+            <div class="row pl-4 pr-3">
+              <h2>{{task.id}} - {{task.title}}</h2>
+            </div>
+            <!-- DESCRIPTION -->
+            <div class="row px-4 text-justify">
+              <span>{{task.description}}</span>
+            </div>
+            <br>
+            <!-- INPUT -->
+            <div class="row justify-content-start px-3">
+              <div class="d-flex p-0 justify-content-center border" style="min-width:30px; position:relative; right:1px;">
+                <span>IN</span>
+              </div>
+              <div *ngIf="!isEditing" class="row px-4">
+                <div class="d-flex p-0 justify-content-center border" *ngFor="let input of io.state.input" 
+                     style="min-width:30px; position:relative; right:1px;">
+                  <span>{{input}}</span>
+                </div>
+              </div>
+              <div *ngIf="isEditing" class="row px-4">
+                <div class="d-flex p-0 justify-content-center border" *ngFor="let input of task.input" 
+                     style="min-width:30px; position:relative; right:1px;">
+                  <span>{{input}}</span>
+                </div>
+              </div>
+            </div>
+            <!-- OUTPUT -->
+            <div class="row justify-content-start px-3">
+              <div class="d-flex p-0 justify-content-center border" style="min-width:30px; position:relative; right:1px;">
+                <span>OUT</span>
+              </div>
+              <div *ngIf="!isEditing" class="row px-4">
+                <div class="d-flex p-0 justify-content-center border" *ngFor="let output of io.state.output; let i = index" 
+                     style="min-width:30px; position:relative; right:1px;">
+                  <span [ngClass]="output == task.output[i] ? 'positive':'negative'">{{output}}</span>
+                </div>
+              </div>
+              <div *ngIf="isEditing" class="row px-4">
+                <div class="d-flex p-0 justify-content-center border" *ngFor="let output of task.output" 
+                     style="min-width:30px; position:relative; right:1px;">
+                  <span>{{output}}</span>
+                </div>
+              </div>
+            </div>
+            <!-- FEEDBACK -->
+            <div class="row pl-4">
+              <span *ngIf="showResult && !passedTest" class="negative">
+                DIDN'T PASS
+              </span>
+              <span *ngIf="showResult && passedTest && !passedHiddenTest" class="negative">
+                DIDN'T WORK IN REAL MACHINE - ARE YOU TRYING TO SABOTAGE?
+              </span>
+              <span *ngIf="showResult && passedTest && passedHiddenTest" class="positive">
+                PASSED
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="row border">
+          <div class="p-2 m-0">
+            <span *ngFor="let cpu of cpus; let i = index">
+              CPU{{i}} -
+              <span *ngIf="isAssembling" class="info"> ASSEMBLING </span>
+              <span *ngIf="!isAssembling && !isEditing && cpu.errors.length === 0" class="positive"> OKAY </span>
+              <span *ngIf="!isAssembling && isEditing && cpu.errors.length === 0" class="info"> WAITING </span>
+              <span *ngIf="!isAssembling && isEditing && cpu.errors.length === 1" class="negative"> {{cpu.errors.length}} ERROR </span>
+              <span *ngIf="!isAssembling && isEditing && cpu.errors.length > 1" class="negative"> {{cpu.errors.length}} ERRORS </span>
+              <br>
+              <div *ngIf="isEditing">
+                <span *ngFor="let error of cpu.errors">
+                  {{error.error}} @ {{error.line + 1}} {{error.code ? ' > '+error.code : ''}}<br>
+                  <span class="pl-3">{{error.solution ? 'TRY '+error.solution : 'NO SOLUTION'}}</span> <br>
+                </span>
+              </div>
+            </span>
+          </div>
+        </div>
+
+        <!-- MANUAL -->
+        <div class="row pt-3">
+          <div class="col-12">
+            <app-manual></app-manual>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

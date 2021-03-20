@@ -1,0 +1,22 @@
+.editor {
+  height: 330px;
+  min-width: 150px;
+  width: 100%;
+
+  vertical-align: bottom;
+}
+
+.cpustate {
+  color: white;
+  font-family: monospace;
+  border: 1px solid white;
+  text-align: center
+}
+
+.flag-true {
+  color: #c4ffc2;
+}
+
+.flag-false {
+  color: #ff9a9a
+}

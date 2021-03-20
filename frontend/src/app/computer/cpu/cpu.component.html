@@ -1,0 +1,44 @@
+
+<div class="row border">
+  <div class="col-12">
+    <div class="row px-3">
+      <ngx-monaco-editor class="editor" [options]="editorOptions" [(ngModel)]="code" (ngModelChange)="emitCode()" (onInit)="monacoOnInit($event)"></ngx-monaco-editor>
+    </div>
+    <div class="row">
+      <div class="col px-0">
+
+      </div>
+
+      <div class="col" style="min-width:210px; max-width:210px;">
+        <div class="row">
+          <div class="cpustate" style="min-width:30px;">
+            PC
+          </div>
+          <div class="cpustate" style="min-width:30px;">
+            C
+          </div>
+          <div class="cpustate" style="min-width:30px;">
+            Z
+          </div>
+          <div class="cpustate" style="min-width:120px;">
+            REGISTERS
+          </div>
+        </div>
+        <div class="row">
+          <div class="cpustate" style="min-width:30px;">
+            {{state.pc}}
+          </div>
+          <div class="cpustate" style="min-width:30px;" [ngClass]="state.flags.carry ? 'flag-true' : 'flag-false'">
+            {{state.flags.carry ? 'T' : 'F'}}
+          </div>
+          <div class="cpustate" style="min-width:30px;" [ngClass]="state.flags.zero ? 'flag-true' : 'flag-false'">
+            {{state.flags.zero ? 'T' : 'F'}}
+          </div>
+          <div class="cpustate" style="min-width:30px;" *ngFor="let regVal of state.registers">
+            {{regVal}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

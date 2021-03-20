@@ -1,0 +1,114 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Importing Bootstrap SCSS file. */
+@import '~bootstrap/scss/bootstrap';
+
+body {
+  background-color: black;
+  //position: fixed; 
+  overflow-y: scroll;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+.positive {
+  color: lime !important;
+}
+
+.info {
+  color: yellow !important;
+}
+
+.negative {
+  color: red !important;
+}
+
+.hightlightedLine {
+  background: rgb(37, 19, 68);
+}
+
+.errorLine {
+  background: rgb(77, 21, 21);
+}
+
+.btn-primary:active,
+.btn-primary:visited,
+.btn-primary:focus {
+  background-color: black !important;
+  border: solid white 1px !important;
+  transition: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+} 
+
+.btn-primary:hover {
+  background-color: #222222 !important;
+  color: white !important;
+  border: solid white 1px;
+}
+
+.btn-primary {
+  color: white !important;
+  background-color: black;
+  border: solid 1px;
+  border-radius: 0;
+  font-family: monospace;
+  transition: none !important;
+}
+
+.btn.btn-primary:disabled{
+  border: solid grey 1px !important;
+  background-color: black !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+span {
+  font-family: monospace;
+  color: white;
+}
+
+.slider {
+  -webkit-appearance: none; 
+  appearance: none;
+  outline: none;
+  border: 1px solid white;
+  height: 20px;
+  width: 100%;
+  background: black;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border: 2px solid white; 
+  cursor: pointer;
+}
+
+.slider::-webkit-slider-thumb:hover {
+  background: black;
+}
+
+select {
+  position: relative;
+  font-family: monospace;
+  font-size: 25px;
+  color: white;
+  background: black;
+  border-radius: 0;
+  border: 0 !important;
+  height: 30px;
+  outline: 0 !important;
+}
+
+.border {
+  border: solid white 1px;
+}
