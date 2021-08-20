@@ -1,5 +1,18 @@
 <div class="row">
   <div class="col-12 border pb-3 px-2">
+    <h5 class="pt-2">SYNTAX</h5>
+    <div class="row pl-4" *ngFor="let syntax of syntaxes">
+      <div class="col" style="min-width:7ch; max-width:7ch;">
+        <span><b>{{syntax.format}}</b></span>
+      </div>
+      <div class="col" style="min-width:21ch; max-width:21ch;">
+        <span>{{syntax.examples}}</span>
+      </div>
+      <div class="col">
+        <span>{{syntax.description}}</span>
+      </div>
+    </div>
+    <h5 class="pt-2"></h5>
     <h5 class="pt-2">INSTRUCTIONS</h5>
     <div class="row pl-4" *ngFor="let instruction of instructions">
       <div class="col">
@@ -20,19 +33,6 @@
             </span>
           </div>
         </div>
-      </div>
-    </div>
-    <h5 class="pt-2"></h5>
-    <h5 class="pt-2">SYNTAX</h5>
-    <div class="row pl-4" *ngFor="let syntax of syntaxes">
-      <div class="col" style="min-width:7ch; max-width:7ch;">
-        <span><b>{{syntax.format}}</b></span>
-      </div>
-      <div class="col" style="min-width:21ch; max-width:21ch;">
-        <span>{{syntax.examples}}</span>
-      </div>
-      <div class="col">
-        <span>{{syntax.description}}</span>
       </div>
     </div>
   </div>

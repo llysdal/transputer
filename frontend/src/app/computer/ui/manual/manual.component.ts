@@ -137,6 +137,71 @@ export class ManualComponent implements OnInit {
       'args': ['', ''],
       'description': 'Turns the CPU executing this instruction off.',
     },
+    {
+      'name': 'AN',
+      'args': ['REG', 'REG/LOC/C8'],
+      'description': 'Logical AND',
+    },
+    {
+      'name': 'ANC',
+      'args': ['REG', 'REG/LOC/C8'],
+      'description': 'Logical AND check, doesn\'t store the result.',
+    },
+    {
+      'name': 'NA',
+      'args': ['REG', 'REG/LOC/C8'],
+      'description': 'Logical NAND',
+    },
+    {
+      'name': 'NAC',
+      'args': ['REG', 'REG/LOC/C8'],
+      'description': 'Logical NAND check, doesn\'t store the result.',
+    },
+    {
+      'name': 'OR',
+      'args': ['REG', 'REG/LOC/C8'],
+      'description': 'Logical OR',
+    },
+    {
+      'name': 'ORC',
+      'args': ['REG', 'REG/LOC/C8'],
+      'description': 'Logical OR check, doesn\'t store the result.',
+    },
+    {
+      'name': 'XR',
+      'args': ['REG', 'REG/LOC/C8'],
+      'description': 'Logical XOR',
+    },
+    {
+      'name': 'XRC',
+      'args': ['REG', 'REG/LOC/C8'],
+      'description': 'Logical XOR check, doesn\'t store the result.',
+    },
+    {
+      'name': 'ROU',
+      'args': ['REG', ''],
+      'description': 'Rotate all bits up, setting bit 0 equal to carry bit.',
+    },
+    {
+      'name': 'ROD',
+      'args': ['REG', ''],
+      'description': 'Rotate all bits down, setting bit 8 equal to carry bit.',
+    },
+    {
+      'name': 'BIU',
+      'args': ['REG', ''],
+      'description': 'Shifts all bits up, setting bit 0 equal to 0.',
+    },
+    {
+      'name': 'BID',
+      'args': ['REG', ''],
+      'description': 'Rotate all bits down, setting bit 8 equal to 0.',
+    },
+    {
+      'name': 'INV',
+      'args': ['REG', ''],
+      'description': 'Inverts all bits.',
+    }
   ]
 
   constructor() { }
