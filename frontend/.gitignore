@@ -7,6 +7,11 @@
 # Only exists if Bazel was run
 /bazel-out
 
+#python
+__pycache__/
+*.py[cod]
+*$py.class
+
 # dependencies
 /node_modules
 
