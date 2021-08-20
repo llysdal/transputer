@@ -2,7 +2,7 @@
   <div class="col-12 px-5">
     <!-- CPU CODE and RAM -->
     <div class="row">
-      <div class="col" *ngFor="let cpu of cpus; let i = index">
+      <div class="col px-0" *ngFor="let cpu of cpus; let i = index">
         <app-cpu [state]="cpu.state" [errors]="cpu.errors" [isEditing]="isEditing" [initialCode]="subprograms[i].code" (codeBuffer)="subprograms[i].code = $event"></app-cpu>
       </div>
       <div class="col" style="min-width:60px; max-width:60px; border-bottom: 1px solid white;">
