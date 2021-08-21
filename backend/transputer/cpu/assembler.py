@@ -15,8 +15,8 @@ class Assembler:
   def __init__(self):
     self.cd = {
       'NOP': (CPU.noOperation, ()),
-      'GST': (CPU.getStatus, ((Param.REG,),)),
-      'PST': (CPU.putStatus, ((Param.REG,),)),
+      'GRE': (CPU.getStatus, ((Param.REG,),)),
+      'PRE': (CPU.putStatus, ((Param.REG,),)),
       'LD':  (CPU.load, ((Param.REG,), (Param.REG, Param.LOC, Param.C8))),
       'LDI': (CPU.loadIncrement, ((Param.REG,), (Param.LOC,))),
       'ST':  (CPU.store, ((Param.REG, Param.C8), (Param.LOC,))),

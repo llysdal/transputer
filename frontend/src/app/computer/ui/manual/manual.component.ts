@@ -63,12 +63,12 @@ export class ManualComponent implements OnInit {
       'description': 'Does nothing but use up a cycle.',
     },
     {
-      'name': 'GST',
+      'name': 'GRE',
       'args': ['REG', ''],
       'description': 'Pops a value from the input stack, and loads it into a main register.',
     },
     {
-      'name': 'PST',
+      'name': 'PRE',
       'args': ['REG', ''],
       'description': 'Pushes a value from a main register to the output stack.',
     },

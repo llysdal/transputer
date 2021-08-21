@@ -26,11 +26,11 @@ Enter the Transputer - the solution to all our problems.
 By utilizing multiple processing units in parallel, we can surpass the performance limit previously set, 
 and reach the stars. Before that - you\'ll need to learn the basics. 
 The CPUs have many instructions available to them - but the two needed in every program is 
-GST (Get STatus) and PST (Put STatus). GST will get one input, and load it into any of the four main registers, 
-while PST will take a value from any main register, and output it from the program. 
+GRE (Get REgister) and PRE (Push REgister). GRE will get one input, and load it into any of the four main registers, 
+while PRE will take a value from any main register, and output it from the program. 
 What do we input from and output to? No need to worry about that! In this simple program, 
 the Transputer simply needs to read one input, and send it straight out again.
-As a hint, \'GST $0\' will load an input into main register 0.''',
+As a hint, \'GRE $0\' will load an input into main register 0.''',
     [42],
     [42],
     [19],
