@@ -31,6 +31,8 @@ export class CpuComponent implements OnInit, OnChanges {
     cursorStyle: 'underline',
     roundedSelection: false,
     overviewRulerLanes: 0,
+    renderIndentGuides: false,
+    showFoldingControls: "always",
     scrollbar: { vertical: 'hidden', horizontal: 'auto' },
     scrollBeyondLastLine: false,
     smoothScrolling: false,

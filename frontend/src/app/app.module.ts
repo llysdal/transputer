@@ -38,6 +38,17 @@ export function myMonacoLoad() {
     ignoreCase: true
   });
 
+  (window as any).monaco.languages.setLanguageConfiguration('hd61700', {
+    onEnterRules: [
+      {
+        beforeText: /[A-z]+[:]/,
+        action: {
+          indentAction: monaco.languages.IndentAction.Indent
+        }
+      }
+    ]
+  });
+
   (window as any).monaco.editor.defineTheme('terminal', {
     base: 'vs-dark',
     inherit: true,
