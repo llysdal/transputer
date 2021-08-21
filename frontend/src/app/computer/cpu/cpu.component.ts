@@ -28,6 +28,7 @@ export class CpuComponent implements OnInit, OnChanges {
     quickSuggestions: false,
     cursorBlinking: "blink",
     contextmenu: false,
+    matchBrackets: "never",
     cursorStyle: 'underline',
     roundedSelection: false,
     overviewRulerLanes: 0,
