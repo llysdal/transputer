@@ -61,8 +61,8 @@ export class TransputerComponent implements OnInit {
     //Get task
     this.getTask(0);
 
-    //Initialize cookie saver
-    interval(5000).subscribe(res => this.saveCookie());
+    //Initialize localstorage saver
+    interval(5000).subscribe(res => this.saveLocalStorage());
 
     //Get progress
     if (this.cookieService.check('progress')) {
@@ -74,33 +74,35 @@ export class TransputerComponent implements OnInit {
   }
 
   setSaveSlot(saveSlot: string) {
-    this.saveCookie();
+    this.saveLocalStorage();
     this.saveSlot = saveSlot;
 
     this.resetToDefault();
 
-    const hasCookie = this.cookieService.check(this.task.name + this.saveSlot);
-    if (hasCookie) {
+    const storage = localStorage.getItem(this.task.name + this.saveSlot);
+    if (storage) {
       console.log('loading ' + this.task.name + this.saveSlot);
-      const cookie = JSON.parse(this.cookieService.get(this.task.name + this.saveSlot));
-      this.cpuAmountSet(cookie.cpuAmount);
-      this.subprograms = cookie.subprograms;
+      const data = JSON.parse(storage);
+      this.cpuAmountSet(data.cpuAmount);
+      this.subprograms = data.subprograms;
     }
   }
 
   async getTask(id) {
+    if (this.task) {
+      this.saveLocalStorage();
+    }
     this.saveSlot = 'A';
-
     this.task = await this.transputerService.getTask(id).toPromise();
 
     this.resetToDefault();
 
-    const hasCookie = this.cookieService.check(this.task.name + this.saveSlot);
-    if (hasCookie) {
+    const storage = localStorage.getItem(this.task.name + this.saveSlot);
+    if (storage) {
       console.log('loading ' + this.task.name + this.saveSlot);
-      const cookie = JSON.parse(this.cookieService.get(this.task.name + this.saveSlot));
-      this.cpuAmountSet(cookie.cpuAmount);
-      this.subprograms = cookie.subprograms;
+      const data = JSON.parse(storage);
+      this.cpuAmountSet(data.cpuAmount);
+      this.subprograms = data.subprograms;
     }
   }
 
@@ -142,13 +144,13 @@ export class TransputerComponent implements OnInit {
     }
   }
 
-  saveCookie() {
+  saveLocalStorage() {
     const data = {
       'cpuAmount': this.cpuAmount,
       'subprograms': this.subprograms,
     }
     console.log('saving ' + this.task.name + this.saveSlot);
-    this.cookieService.set(this.task.name + this.saveSlot, JSON.stringify(data));
+    localStorage.setItem(this.task.name + this.saveSlot, JSON.stringify(data));
   }
 
   assemble() {
