@@ -39,6 +39,15 @@
             <button type="button" class="btn btn-primary btn-block" (click)="skipToEnd()" [disabled]="isEditing">▶▶▌</button>
           </div>
         </div>
+        <!-- SAVE SLOT -->
+        <div class="row pt-5">
+          <div *ngFor="let i of ['A','B','C','D','E']" class="col px-0">
+            <button type="button" class="btn btn-primary btn-block" (click)="setSaveSlot(i)" [disabled]="!isEditing">
+              <span *ngIf="saveSlot == i">>{{i}}<</span>
+              <span *ngIf="saveSlot != i">{{i}}</span>
+            </button>
+          </div>
+        </div>
         <!-- TASK SELECTOR -->
         <div class="row pt-3">
           <div class="col-12">

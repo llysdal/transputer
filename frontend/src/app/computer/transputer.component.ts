@@ -38,6 +38,7 @@ export class TransputerComponent implements OnInit {
   io: any;
 
   //Tasks
+  saveSlot: string = 'A';
   task: any;
   maxTask;
 
@@ -72,15 +73,32 @@ export class TransputerComponent implements OnInit {
     }
   }
 
+  setSaveSlot(saveSlot: string) {
+    this.saveCookie();
+    this.saveSlot = saveSlot;
+
+    this.resetToDefault();
+
+    const hasCookie = this.cookieService.check(this.task.name + this.saveSlot);
+    if (hasCookie) {
+      console.log('loading ' + this.task.name + this.saveSlot);
+      const cookie = JSON.parse(this.cookieService.get(this.task.name + this.saveSlot));
+      this.cpuAmountSet(cookie.cpuAmount);
+      this.subprograms = cookie.subprograms;
+    }
+  }
+
   async getTask(id) {
+    this.saveSlot = 'A';
+
     this.task = await this.transputerService.getTask(id).toPromise();
 
     this.resetToDefault();
 
-    const hasCookie = this.cookieService.check(this.task.name);
+    const hasCookie = this.cookieService.check(this.task.name + this.saveSlot);
     if (hasCookie) {
-      console.log('loading '+this.task.name);
-      const cookie = JSON.parse(this.cookieService.get(this.task.name));
+      console.log('loading ' + this.task.name + this.saveSlot);
+      const cookie = JSON.parse(this.cookieService.get(this.task.name + this.saveSlot));
       this.cpuAmountSet(cookie.cpuAmount);
       this.subprograms = cookie.subprograms;
     }
@@ -129,8 +147,8 @@ export class TransputerComponent implements OnInit {
       'cpuAmount': this.cpuAmount,
       'subprograms': this.subprograms,
     }
-    console.log('saving '+this.task.name);
-    this.cookieService.set(this.task.name, JSON.stringify(data));
+    console.log('saving ' + this.task.name + this.saveSlot);
+    this.cookieService.set(this.task.name + this.saveSlot, JSON.stringify(data));
   }
 
   assemble() {
