@@ -52,24 +52,20 @@ class Assembler:
     labels = {}
     errors = []
     for line in code.split('\n'):
-      words = line.strip().split(' ')
+      withoutComments = line.strip().split(';')[0]
+      words = withoutComments.strip().split(' ')
       key = words[0].upper()
 
       if key == '':
         #Blank
         pass
-      elif isComment(line.strip()):
-        #Comment
-        pass
       elif isLabel(key):
         #Label
         args = words[1:]
         
-        #Trim comment
-        for i, arg in enumerate(args):
-          if isComment(arg):
-            args = args[0:i]
-            break
+        #Remove empty
+        while '' in args:
+          args.remove('')
 
         if not args:
           labels[key[0:-1]] = pc
@@ -110,14 +106,12 @@ class Assembler:
     lineNumber = 0
     instructionStack = []
     for line in code.split('\n'):
-      words = line.strip().split(' ')
+      withoutComments = line.strip().split(';')[0]
+      words = withoutComments.strip().split(' ')
       key = words[0].upper()
 
       if key == '':
         #Blank
-        pass
-      elif isComment(line.strip()):
-        #Comment
         pass
       elif isLabel(key):
         #Label
@@ -129,12 +123,6 @@ class Assembler:
         
         #Instruction
         args = words[1:]
-        
-        #Trim comment
-        for i, arg in enumerate(args):
-          if isComment(arg):
-            args = args[0:i]
-            break
       
         #Remove empty
         while '' in args:
