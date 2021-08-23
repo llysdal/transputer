@@ -154,7 +154,7 @@
             <span *ngFor="let cpu of cpus; let i = index">
               CPU{{i}} -
               <span *ngIf="isAssembling" class="info"> ASSEMBLING </span>
-              <span *ngIf="!isAssembling && !isEditing && cpu.errors.length === 0" class="positive"> OKAY </span>
+              <span *ngIf="!isAssembling && !isEditing && cpu.errors.length === 0" class="positive"> LIVE </span>
               <span *ngIf="!isAssembling && isEditing && cpu.errors.length === 0" class="info"> WAITING </span>
               <span *ngIf="!isAssembling && isEditing && cpu.errors.length === 1" class="negative"> {{cpu.errors.length}} ERROR </span>
               <span *ngIf="!isAssembling && isEditing && cpu.errors.length > 1" class="negative"> {{cpu.errors.length}} ERRORS </span>

@@ -11,6 +11,10 @@ body {
   width: 100%;
 }
 
+.hide-cursor .monaco-editor .cursors-layer > .cursor {
+	display: none !important;
+}
+
 .positive {
   color: lime !important;
 }
@@ -24,11 +28,11 @@ body {
 }
 
 .hightlightedLine {
-  background: rgb(37, 19, 68);
+  background: rgba(74, 38, 136, 0.5);
 }
 
 .errorLine {
-  background: rgb(77, 21, 21);
+  background: rgba(154, 42, 42, 0.5);
 }
 
 .btn-primary:active,

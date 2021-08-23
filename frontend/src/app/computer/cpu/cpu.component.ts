@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { NgModel } from '@angular/forms';
+import { range } from 'rxjs';
 
 @Component({
   selector: 'app-cpu',
@@ -17,7 +18,7 @@ export class CpuComponent implements OnInit, OnChanges {
 
   initialized = false;
 
-  editor: any;
+  editor;
   decorators = [];
 
   editorOptions = {
@@ -32,7 +33,10 @@ export class CpuComponent implements OnInit, OnChanges {
     cursorStyle: 'underline',
     roundedSelection: false,
     overviewRulerLanes: 0,
+    occurrencesHighlight: false,
     renderIndentGuides: false,
+    renderLineHighlight: 'none',
+    selectionHighlight: false,
     showFoldingControls: "always",
     scrollbar: { vertical: 'hidden', horizontal: 'auto' },
     scrollBeyondLastLine: false,
@@ -50,6 +54,10 @@ export class CpuComponent implements OnInit, OnChanges {
 
   monacoOnInit(editor) {
     this.editor = editor;
+
+    editor.onDidChangeModelContent((event) => {
+      this.updateDecorators(event.changes[0]);
+    });
   }
 
   ngOnChanges(changes) {
@@ -57,39 +65,64 @@ export class CpuComponent implements OnInit, OnChanges {
       return;
     }
     
-    if (this.isEditing) {
-      this.editor.updateOptions({ readOnly: false, cursorBlinking: "blink" })
-    } else {
-      this.editor.updateOptions({ readOnly: true, cursorBlinking: "solid" })
+    if (changes.isEditing) {
+      if (this.isEditing) {
+        this.editor.updateOptions({ readOnly: false, cursorBlinking: "blink" });
+      } else {
+        this.editor.updateOptions({ readOnly: true, cursorBlinking: "solid"});
+      }
     }
-    if (this.errors.length !== undefined && this.errors.length !== 0 && this.isEditing) {
+
+    if (changes.errors && this.errors.length !== 0) {
       let decoraterArray = [];
 
       for (let error of this.errors) {
         decoraterArray.push({
-          range: new monaco.Range(error.line + 1, 1, error.line + 1, 100),
+          range: new monaco.Range(error.line + 1, 1, error.line + 1, 1),
           options: {
             isWholeLine: true,
-            className: 'errorLine'
+            className: 'errorLine',
+            marginClassName: 'errorLine',
           }
         });
       }
 
       this.decorators = this.editor.deltaDecorations(this.decorators, decoraterArray);
-
-    } else if (this.state.line !== null) {
-      this.decorators = this.editor.deltaDecorations(this.decorators, [
-        {
-          range: new monaco.Range(this.state.line + 1, 1, this.state.line + 1, 100),
-          options: {
-            isWholeLine: true,
-            className: 'hightlightedLine'
-          }
-        }
-      ]);
-    } else {
-      this.decorators = this.editor.deltaDecorations(this.decorators, []);
     }
+
+    if (changes.state) {
+      if (this.state.line !== null) {
+        this.decorators = this.editor.deltaDecorations(this.decorators, [
+          {
+            range: new monaco.Range(this.state.line + 1, 1, this.state.line + 1, 1),
+            options: {
+              isWholeLine: true,
+              className: 'hightlightedLine',
+              marginClassName: 'hightlightedLine',
+            }
+          }
+        ]);
+      } else {
+        this.decorators = this.editor.deltaDecorations(this.decorators, []);
+      }
+    } 
+    // else {
+    //   //this.decorators = this.editor.deltaDecorations(this.decorators, []);
+    // }
+  }
+
+  updateDecorators(changes) {
+    let decorations = this.editor.getLineDecorations(changes.range.startLineNumber);
+
+    if (decorations.length > 0) {
+      decorations = decorations.map((decoration) => decoration.id);
+
+      this.editor.deltaDecorations(decorations, []);
+    }
+  }
+
+  onChange(event) {
+    this.emitCode();
   }
 
   emitCode() {

@@ -1,7 +1,11 @@
 
 
   <div class="col-12 px-0 border">
-    <ngx-monaco-editor class="editor" [options]="editorOptions" [(ngModel)]="code" (ngModelChange)="emitCode()" (onInit)="monacoOnInit($event)"></ngx-monaco-editor>
+    <ngx-monaco-editor class="editor" [options]="editorOptions" 
+      [(ngModel)]="code" 
+      (ngModelChange)="onChange($event)" 
+      (onInit)="monacoOnInit($event)"
+      [class.hide-cursor]="!isEditing"></ngx-monaco-editor>
     <div class="position-absolute" style="min-width:210px; max-width:210px; right: -16px; bottom: 0;">
       <div class="row">
         <div class="cpustate" style="min-width:30px;">
