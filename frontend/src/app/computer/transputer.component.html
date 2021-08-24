@@ -95,46 +95,10 @@
               <h2>{{task.id}} - {{task.title}}</h2>
             </div>
             <!-- DESCRIPTION -->
-            <div class="row px-4 text-justify">
+            <div class="row px-4 text-justify" style="min-height: 66px;">
               <span>{{task.description}}</span>
             </div>
             <br>
-            <!-- INPUT -->
-            <div class="row justify-content-start px-3">
-              <div class="d-flex p-0 justify-content-center border" style="min-width:30px; position:relative; right:1px;">
-                <span>IN</span>
-              </div>
-              <div *ngIf="!isEditing" class="row px-4">
-                <div class="d-flex p-0 justify-content-center border" *ngFor="let input of io.state.input" 
-                     style="min-width:30px; position:relative; right:1px;">
-                  <span>{{input}}</span>
-                </div>
-              </div>
-              <div *ngIf="isEditing" class="row px-4">
-                <div class="d-flex p-0 justify-content-center border" *ngFor="let input of task.input" 
-                     style="min-width:30px; position:relative; right:1px;">
-                  <span>{{input}}</span>
-                </div>
-              </div>
-            </div>
-            <!-- OUTPUT -->
-            <div class="row justify-content-start px-3">
-              <div class="d-flex p-0 justify-content-center border" style="min-width:30px; position:relative; right:1px;">
-                <span>OUT</span>
-              </div>
-              <div *ngIf="!isEditing" class="row px-4">
-                <div class="d-flex p-0 justify-content-center border" *ngFor="let output of io.state.output; let i = index" 
-                     style="min-width:30px; position:relative; right:1px;">
-                  <span [ngClass]="output == task.output[i] ? 'positive':'negative'">{{output}}</span>
-                </div>
-              </div>
-              <div *ngIf="isEditing" class="row px-4">
-                <div class="d-flex p-0 justify-content-center border" *ngFor="let output of task.output" 
-                     style="min-width:30px; position:relative; right:1px;">
-                  <span>{{output}}</span>
-                </div>
-              </div>
-            </div>
             <!-- FEEDBACK -->
             <div class="row pl-4">
               <span *ngIf="showResult && !passedTest" class="negative">
@@ -146,6 +110,46 @@
               <span *ngIf="showResult && passedTest && passedHiddenTest" class="positive">
                 PASSED
               </span>
+            </div>
+
+          
+            <div class="col p-0 border align-self-end">
+              <!-- INPUT -->
+              <div class="row justify-content-start px-3">
+                <div class="d-flex p-0 justify-content-center border" style="min-width:40px; position:relative; right: 1px; border-right-width: 2px !important;">
+                  <span>IN</span>
+                </div>
+                <div *ngIf="!isEditing" class="row px-3">
+                  <div class="d-flex p-0 justify-content-center border" *ngFor="let input of io.state.input" 
+                        style="min-width:35px; position:relative; right:2px;">
+                    <span>{{input}}</span>
+                  </div>
+                </div>
+                <div *ngIf="isEditing" class="row px-3">
+                  <div class="d-flex p-0 justify-content-center border" *ngFor="let input of task.input" 
+                        style="min-width:35px; position:relative; right:2px;">
+                    <span>{{input}}</span>
+                  </div>
+                </div>
+              </div>
+              <!-- OUTPUT -->
+              <div class="row justify-content-start px-3">
+                <div class="d-flex p-0 justify-content-center border" style="min-width:40px; position:relative; right:1px; border-right-width: 2px !important;">
+                  <span>OUT</span>
+                </div>
+                <div *ngIf="!isEditing" class="row px-3">
+                  <div class="d-flex p-0 justify-content-center border" *ngFor="let output of io.state.output; let i = index" 
+                        style="min-width:35px; position:relative; right:2px;">
+                    <span [ngClass]="output == task.output[i] ? 'positive':'negative'">{{output}}</span>
+                  </div>
+                </div>
+                <div *ngIf="isEditing" class="row px-3">
+                  <div class="d-flex p-0 justify-content-center border" *ngFor="let output of task.output" 
+                        style="min-width:35px; position:relative; right:2px;">
+                    <span>{{output}}</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

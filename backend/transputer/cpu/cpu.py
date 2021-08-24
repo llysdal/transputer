@@ -249,4 +249,5 @@ class CPU:
       self.returnSub()
       
   def returnSub(self):
-    self.pc = self.callStack.pop()
+    if len(self.callStack) > 0:
+      self.pc = self.callStack.pop()
