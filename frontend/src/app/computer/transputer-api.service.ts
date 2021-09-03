@@ -19,10 +19,10 @@ export class TransputerApiService {
         .get(`${API_URL}/task?id=` + task);
   }
 
-  assembleProgram(program: string[]): Observable<any> {
-    return this.http
-        .post(`${API_URL}/assemble`, {cpucode: program});
-  }
+  // assembleProgram(program: string[]): Observable<any> {
+  //   return this.http
+  //       .post(`${API_URL}/assemble`, {cpucode: program});
+  // }
 
   emulateProgram(task: number, program: string[]): Observable<any> {
     return this.http

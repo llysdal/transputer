@@ -163,17 +163,37 @@ export class TransputerComponent implements OnInit {
     this.cpus.forEach((cpu, index) => program.push(this.subprograms[index].code));
     
     let errors = false;
-    this.transputerService.assembleProgram(program).subscribe( res => {
-      this.cpus.forEach((cpu, index) => {
-        const cpuErrors = res[index];
-        if (cpuErrors.length > 0) {
-          errors = true;
-        }
-        cpu.errors = cpuErrors;
-      });
+    // this.transputerService.assembleProgram(program).subscribe( res => {
+    //   this.cpus.forEach((cpu, index) => {
+    //     const cpuErrors = res[index];
+    //     if (cpuErrors.length > 0) {
+    //       errors = true;
+    //     }
+    //     cpu.errors = cpuErrors;
+    //   });
 
-      if (errors) {
+    //   if (errors) {
+    //     console.log('assembly: errors');
+
+    //     interval(500).pipe(
+    //       take(1), 
+    //       finalize(() => {
+    //         this.isEditing = true;
+    //         this.isAssembling = false;
+    //       })
+    //     ).subscribe(res => res);
+
+    //     return;
+    //   }
+
+    this.transputerService.emulateProgram(this.task.id, program).subscribe( res => {
+      if (res['assemblyFailed']) {
         console.log('assembly: errors');
+
+        const assemblyErrors = res['assemblyErrors']
+        this.cpus.forEach((cpu, index) => {
+          cpu.errors = assemblyErrors[index];
+        });
 
         interval(500).pipe(
           take(1), 
@@ -181,34 +201,33 @@ export class TransputerComponent implements OnInit {
             this.isEditing = true;
             this.isAssembling = false;
           })
-        ).subscribe(res => res);
+        ).subscribe();
 
-        return;
+        return
       }
 
-      this.transputerService.emulateProgram(this.task.id, program).subscribe( res => {
-        this.hitCycleLimit = res['hitCycleLimit'];
-        this.passedTest = res['passedTest'];
-        this.passedHiddenTest = res['passedHiddenTest'];
-        const programStates = res['programStates'];
-        
+      this.hitCycleLimit = res['hitCycleLimit'];
+      this.passedTest = res['passedTest'];
+      this.passedHiddenTest = res['passedHiddenTest'];
+      const programStates = res['programStates'];
+      
 
-        this.universalClock = 0;
-        this.programLength = programStates.length;
-        this.cpus.forEach((cpu, index) => {
-          cpu.states = programStates.map(cycle => cycle.cpus[index]);
-          cpu.state = cpu.states[0]
-        });
-
-        this.memory.states = programStates.map(cycle => cycle.memory);
-        this.memory.state = this.memory.states[0];
-        this.io.states = programStates.map(cycle => cycle.io);
-        this.io.state = this.io.states[0];
-
-        console.log('assembly: successful')
-        this.isEditing = false;
-        this.isAssembling = false;
+      this.universalClock = 0;
+      this.programLength = programStates.length;
+      this.cpus.forEach((cpu, index) => {
+        cpu.states = programStates.map(cycle => cycle.cpus[index]);
+        cpu.state = cpu.states[0];
+        cpu.errors = [];
       });
+
+      this.memory.states = programStates.map(cycle => cycle.memory);
+      this.memory.state = this.memory.states[0];
+      this.io.states = programStates.map(cycle => cycle.io);
+      this.io.state = this.io.states[0];
+
+      console.log('assembly: successful')
+      this.isEditing = false;
+      this.isAssembling = false;
     });
   }
 

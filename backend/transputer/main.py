@@ -24,7 +24,7 @@ def getTask():
   
   return jsonify(task)
 
-@transputerapi.route('/assemble', methods = ['POST'])
+""" @transputerapi.route('/assemble', methods = ['POST'])
 def assemble():
   program = request.json.get('cpucode')
   
@@ -35,15 +35,31 @@ def assemble():
     instructionStack = assembler.assemble(cpuCode)
     errorList.append(instructionStack['errors'])
   
-  return jsonify(errorList)
+  return jsonify(errorList) """
 
 @transputerapi.route('/emulate', methods = ['POST'])
 def emulate():
   taskId = request.json.get('task')
   program = request.json.get('cpucode')
   task = tasks[taskId]
+
+  assembler = Assembler()
+  assembled, errorList = [], []
+  assemblyFailed = False
+  for cpuCode in program:
+    instructionStack = assembler.assemble(cpuCode)
+    errorList.append(instructionStack['errors'])
+    if len(instructionStack['errors']) > 0: assemblyFailed = True
+    assembled.append(instructionStack)
+
+  if assemblyFailed:
+    return jsonify({
+      'assemblyFailed': True,
+      'assemblyErrors': errorList
+    })
+    
   
-  cpus, memory, io, programStates = emulateTask(program, task, output=True)
+  cpus, memory, io, programStates = emulateTask(assembled, task, output=True)
   
   #Test if right
   passedTest = False
@@ -51,12 +67,13 @@ def emulate():
   if io.outputs == task.outputs:
     passedTest = True
     #Check hidden test
-    cpusH, memoryH, ioH = emulateTask(program, task, useHidden=True)
+    cpusH, memoryH, ioH = emulateTask(assembled, task, useHidden=True)
     
     if ioH.outputs == task.hiddenOutputs:
       passedHiddenTest = True
   
   return jsonify({
+    'assemblyFailed': False,
     'hitCycleLimit': len(programStates) == CYCLE_LIMIT,
     'passedTest': passedTest,
     'passedHiddenTest': passedHiddenTest,
@@ -65,21 +82,19 @@ def emulate():
   
 CYCLE_LIMIT = 1000
   
-def emulateTask(program, task, useHidden=False, output=False):
+def emulateTask(assembledProgram, task, useHidden=False, output=False):
   memory = Memory(16)
   if useHidden:
     io = IO(task.hiddenInputs.copy())
   else:
     io = IO(task.inputs.copy())
   
-  assembler = Assembler()
   cpus = []
   
-  for cpuCode in program:
-    assembled = assembler.assemble(cpuCode)
+  for cpuCode in assembledProgram:
     cpu = CPU(memory, io)
-    cpu.loadInstructionStack(assembled['instructions'])
-    cpu.line = assembled['firstLine']
+    cpu.loadInstructionStack(cpuCode['instructions'])
+    cpu.line = cpuCode['firstLine']
     cpus.append(cpu)
   
   programStates = []
