@@ -20,26 +20,12 @@ export class TransputerApiService {
   }
 
   assembleProgram(program: string[]): Observable<any> {
-    let replacedProgram = '';
-    for (let code of program) {
-      //Replace \n with %0A and & with %26
-      replacedProgram += 'program[]=' + code.replace(/(?:\r\n|\r|\n)/g, '%0A').replace(/&/g, '%26') + '&';
-    }
-    replacedProgram = replacedProgram.slice(0, replacedProgram.length - 1)
-
     return this.http
-        .get(`${API_URL}/assemble?` + replacedProgram);
+        .post(`${API_URL}/assemble`, {cpucode: program});
   }
 
   emulateProgram(task: number, program: string[]): Observable<any> {
-    let replacedProgram = '';
-    for (let code of program) {
-      //Replace \n with %0A
-      replacedProgram += 'program[]=' + code.replace(/(?:\r\n|\r|\n)/g, '%0A').replace(/&/g, '%26') + '&';
-    }
-    replacedProgram = replacedProgram.slice(0, replacedProgram.length - 1)
-
     return this.http
-      .get(`${API_URL}/emulate?task=${task}&${replacedProgram}`);
+      .post(`${API_URL}/emulate`, {task: task, cpucode: program});
   }
 }

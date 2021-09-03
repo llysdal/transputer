@@ -24,9 +24,9 @@ def getTask():
   
   return jsonify(task)
 
-@transputerapi.route('/assemble')
+@transputerapi.route('/assemble', methods = ['POST'])
 def assemble():
-  program = request.args.getlist('program[]')
+  program = request.json.get('cpucode')
   
   assembler = Assembler()
   
@@ -37,10 +37,10 @@ def assemble():
   
   return jsonify(errorList)
 
-@transputerapi.route('/emulate')
+@transputerapi.route('/emulate', methods = ['POST'])
 def emulate():
-  taskId = int(request.args.get('task'))
-  program = request.args.getlist('program[]')
+  taskId = request.json.get('task')
+  program = request.json.get('cpucode')
   task = tasks[taskId]
   
   cpus, memory, io, programStates = emulateTask(program, task, output=True)
